@@ -42,17 +42,17 @@
     
         var stimulus_combinations = [
             /* Identical */
-            {stimuli: ["img/circle.png", "img/circle.png"]},
-            {stimuli: ["img/square.png", "img/square.png"]},
-            {stimuli: ["img/triangle.png", "img/triangle.png"]},
+            {stimuli: ["img/circle.png", "img/circle.png"], answer: 'same'},
+            {stimuli: ["img/square.png", "img/square.png"], answer: 'same'},
+            {stimuli: ["img/triangle.png", "img/triangle.png"], answer: 'same'},
 
             /* Different */
-            {stimuli: ["img/circle.png", "img/square.png"]},
-            {stimuli: ["img/circle.png", "img/triangle.png"]},
-            {stimuli: ["img/square.png", "img/circle.png"]},
-            {stimuli: ["img/square.png", "img/triangle.png"]},
-            {stimuli: ["img/triangle.png", "img/circle.png"]},
-            {stimuli: ["img/triangle.png", "img/circle.png"]},
+            {stimuli: ["img/circle.png", "img/square.png"], answer: 'different'},
+            {stimuli: ["img/circle.png", "img/triangle.png"], answer: 'different'},
+            {stimuli: ["img/square.png", "img/circle.png"], answer: 'different'},
+            {stimuli: ["img/square.png", "img/triangle.png"], answer: 'different'},
+            {stimuli: ["img/triangle.png", "img/circle.png"], answer: 'different'},
+            {stimuli: ["img/triangle.png", "img/circle.png"], answer: 'different'},
         ];
 
         console.log('we made it here');
@@ -65,9 +65,9 @@
             second_stim_duration: 1000,
             gap_duration: 500,
             stimuli: jsPsych.timelineVariable('stimuli'),
-            answer: 'same',
-            prompt: 'which one is it?',
+            answer: jsPsych.timelineVariable('answer'),
         };
+      
         
         
         var trial_procedure = {
