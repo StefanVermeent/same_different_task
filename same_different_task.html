@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Same or Different</title>
+        <script src="jspsych-6.2.0/jspsych.js"></script>
+        <script src="jspsych-6.2.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src='jspsych-6.2.0/plugins/jspsych-same-different-image.js'></script>
+        <link href="jspsych-6.2.0/css/jspsych.css" rel="stylesheet" type="text/css">
+    </head>
+    <body></body>
+    <script>
+
+        /* Create timeline */
+        var timeline = [];
+
+        /* Define welcome trial */
+        var welcome = {
+            type: "html-keyboard-response",
+            stimulus: "Welcome to the experiment. Press any key to begin."
+        };
+        timeline.push(welcome);
+
+        /* define instructions */
+        var instructions = {
+            type: "html-keyboard-response",
+            stimulus: "<p>In this experiment, two sets of shapes will be presented " +
+                "quickly after one another.</p><p>It is your task to judge whether " +
+                "the second set of shapes is identical to the first set.<p>" +
+                "If the second set of shapes is <strong>identical</strong> " +
+                "to the first set, press the letter 'F' on the keyboard as fast " +
+                "as you can.</p>" +
+                "<p>If the second set of shapes is <strong>different</strong>, " +
+                "press the letter 'J' as fast as you can.</p>" +
+                "<br>" +
+                "<p>You will start with a couple of practice trials</p>" +
+                "<br><br>" +
+                "<p>Press any key to begin.</p>",
+            post_trial_gap: 2000
+        };
+        timeline.push(instructions);
+
+    
+        var stimulus_combinations = [
+            /* Identical */
+            {stimuli: ["img/circle.png", "img/circle.png"]},
+            {stimuli: ["img/square.png", "img/square.png"]},
+            {stimuli: ["img/triangle.png", "img/triangle.png"]},
+
+            /* Different */
+            {stimuli: ["img/circle.png", "img/square.png"]},
+            {stimuli: ["img/circle.png", "img/triangle.png"]},
+            {stimuli: ["img/square.png", "img/circle.png"]},
+            {stimuli: ["img/square.png", "img/triangle.png"]},
+            {stimuli: ["img/triangle.png", "img/circle.png"]},
+            {stimuli: ["img/triangle.png", "img/circle.png"]},
+        ];
+
+        console.log('we made it here');
+
+        var practice_trials = {
+            type: 'same-different-image',
+            same_key: 'f',
+            different_key: "j",
+            first_stim_duration: 1000,
+            second_stim_duration: 1000,
+            gap_duration: 500,
+            stimuli: jsPsych.timelineVariable('stimuli'),
+            answer: 'same',
+            prompt: 'which one is it?',
+        };
+        
+        
+        var trial_procedure = {
+            timeline: practice_trials,
+            timeline_variables: stimulus_combinations,
+            randomize_order: true
+        };
+        timeline.push(trial_procedure);
+
+       
+
+
+        jsPsych.init({
+            timeline: timeline
+        })
+        
+        console.log('we made it past the error')
+
+    </script>
+</html>
+
+
+
