@@ -38,54 +38,89 @@
             post_trial_gap: 2000
         };
         timeline.push(instructions);
-
     
         var stimulus_combinations = [
             /* Identical */
-            {stimuli: ["img/circle.png", "img/circle.png"], answer: 'same'},
-            {stimuli: ["img/square.png", "img/square.png"], answer: 'same'},
+            {stimuli: ["img/circle.png", "img/circle.png"],     answer: 'same'},
+            {stimuli: ["img/square.png", "img/square.png"],     answer: 'same'},
             {stimuli: ["img/triangle.png", "img/triangle.png"], answer: 'same'},
 
             /* Different */
-            {stimuli: ["img/circle.png", "img/square.png"], answer: 'different'},
+            {stimuli: ["img/circle.png", "img/square.png"],   answer: 'different'},
             {stimuli: ["img/circle.png", "img/triangle.png"], answer: 'different'},
-            {stimuli: ["img/square.png", "img/circle.png"], answer: 'different'},
+            {stimuli: ["img/square.png", "img/circle.png"],   answer: 'different'},
             {stimuli: ["img/square.png", "img/triangle.png"], answer: 'different'},
             {stimuli: ["img/triangle.png", "img/circle.png"], answer: 'different'},
             {stimuli: ["img/triangle.png", "img/circle.png"], answer: 'different'},
         ];
-
-        console.log('we made it here');
-
+        
+        /* Timeline variables are necessary for creating a procedure with different trial types.
+           For example, below we have a fixation cross trial (html-keyboard-response) and the same-different trials.
+           Each time the procedure runs, we see the cross then the same-different trials.
+           The timeline variables can be used to vary the input/output/parameters of each run.
+           Here, I used your stimulus_combinations object to make the images and answers.
+           To randomize, you enter the randomize_order: true inside the larger trial object (practice_trials) */
         var practice_trials = {
-            type: 'same-different-image',
-            same_key: 'f',
-            different_key: "j",
-            first_stim_duration: 1000,
-            second_stim_duration: 1000,
-            gap_duration: 500,
-            stimuli: jsPsych.timelineVariable('stimuli'),
-            answer: jsPsych.timelineVariable('answer'),
+          timeline: [
+            // Fixation cross
+            {
+              type: 'html-keyboard-response',
+              stimulus: "<p style='font-size: 32px;'>+</p>",
+              choices: jsPsych.NO_KEYS,
+              trial_duration: 500
+            },
+            // Same-different Trials 
+            {
+              type: 'same-different-image',
+              same_key: 'f',
+              different_key: "j",
+              first_stim_duration: 1000,
+              second_stim_duration: 1000,
+              gap_duration: 500,
+              prompt: "<br><br>Same or Different?",
+              stimuli: jsPsych.timelineVariable('stimuli'),
+              answer: jsPsych.timelineVariable('answer'),
+            }
+          ],
+          // Timeline variables, here we've matched the timeline variables with actual parameters names 
+          // However, you don't have to do that here. You can also add variables that might affect other trials
+          // For example, we could add a jsPsych.timelineVariable for the 'stimulus' parameter in the html-keyboard-response
+          // if we wanted to vary the fixation cross.
+          timeline_variables: stimulus_combinations,
+          randomize_order: true
         };
-      
         
+        timeline.push(practice_trials);
         
-        var trial_procedure = {
-            timeline: practice_trials,
-            timeline_variables: stimulus_combinations,
-            randomize_order: true
+        var between = {
+          type: "html-keyboard-response",
+          stimulus: "<p>Nice! Now not randomized</p>",
+          post_trial_gap: 2000
         };
-        timeline.push(trial_procedure);
-
+        timeline.push(between);
+        
+        // You can do a more simple implementation if you are using trials of the same type (e.g., all same-different trials)
+        // The problem is that you can't randomize (I think)
+        var practice_trials2 = {
+          type: 'same-different-image',
+          different_key: "j",
+          first_stim_duration: 1000,
+          second_stim_duration: 1000,
+          gap_duration: 500,
+          prompt: "<br><br>Same or Different?",
+          // Here you are entering the answer and stimulus as things that change across trials
+          // The difference is that you don't need timeline variables.
+          // However, you have to match names in your stimulus_combinations with the actual parameter names in the plugin
+          timeline: stimulus_combinations
+        };
+        
+        timeline.push(practice_trials2);
        
-
-
         jsPsych.init({
-            timeline: timeline
+            timeline: timeline,
+            preload_images: ["img/circle.png", "img/square.png", "img/square.png"]
         })
         
-        console.log('we made it past the error')
-
     </script>
 </html>
 
